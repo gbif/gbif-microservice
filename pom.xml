@@ -1,0 +1,147 @@
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>org.gbif</groupId>
+    <artifactId>motherpom</artifactId>
+    <version>11</version>
+  </parent>
+
+  <artifactId>gbif-microservice</artifactId>
+  <version>0.1-SNAPSHOT</version>
+  <packaging>jar</packaging>
+
+  <name>GBIF Microservice</name>
+  <description>Common utils and other classes in use by GBIF web projects that an embedded jetty server and curator discovery services.</description>
+  <url>http://sites.gbif.org/common-resources/gbif-microservice</url>
+
+  <distributionManagement>
+    <repository>
+      <id>labs-releases</id>
+      <url>http://repository.gbif.org/content/repositories/labs-releases</url>
+    </repository>
+    <snapshotRepository>
+      <id>labs-snapshots</id>
+      <url>http://repository.gbif.org/content/repositories/labs-snapshots</url>
+    </snapshotRepository>
+    <site>
+      <id>gbif-site</id>
+      <name>Site for the gbif-microservice project</name>
+      <url>scp://tools.gbif.org:/var/www/html/sites/common-resources/gbif-microservice</url>
+    </site>
+  </distributionManagement>
+
+  <properties>
+    <junit.version>4.11</junit.version>
+    <curator.version>2.6.0</curator.version>
+    <maven-core.version>3.1.1</maven-core.version>
+    <jettyVersion>7.3.1.v20110307</jettyVersion>
+    <jcommander.version>1.7</jcommander.version>
+  </properties>
+
+  <scm>
+    <connection>scm:git:git@github.com:gbif/gbif-microservice.git</connection>
+    <url>https://github.com/gbif/gbif-microservice</url>
+    <developerConnection>scm:git:git@github.com:gbif/gbif-microservice.git</developerConnection>
+    <tag>HEAD</tag>
+  </scm>
+
+  <issueManagement>
+    <system>JIRA</system>
+    <url>http://dev.gbif.org/issues</url>
+  </issueManagement>
+
+  <ciManagement>
+    <system>jenkins</system>
+    <url>http://builds.gbif.org/job/gbif-microservice</url>
+  </ciManagement>
+
+  <repositories>
+    <repository>
+      <id>gbif-all</id>
+      <url>http://repository.gbif.org/content/groups/gbif</url>
+    </repository>
+    <repository>
+      <id>gbif-thirdparty</id>
+      <url>http://repository.gbif.org/content/repositories/thirdparty</url>
+    </repository>
+  </repositories>
+
+  <dependencies>
+
+    <!-- Tests -->
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>${junit.version}</version>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.apache.maven</groupId>
+      <artifactId>maven-core</artifactId>
+      <version>${maven-core.version}</version>
+    </dependency>
+
+    <!-- curator for talking to zookeeper -->
+    <dependency>
+      <groupId>org.apache.curator</groupId>
+      <artifactId>curator-client</artifactId>
+      <version>${curator.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.curator</groupId>
+      <artifactId>curator-framework</artifactId>
+      <version>${curator.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.curator</groupId>
+      <artifactId>curator-recipes</artifactId>
+      <version>${curator.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.curator</groupId>
+      <artifactId>curator-test</artifactId>
+      <version>${curator.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.curator</groupId>
+      <artifactId>curator-x-discovery</artifactId>
+      <version>${curator.version}</version>
+      <exclusions>
+        <exclusion>
+          <groupId>log4j</groupId>
+          <artifactId>log4j</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.slf4j</groupId>
+          <artifactId>slf4j-log4j12</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+
+    <dependency>
+      <groupId>org.eclipse.jetty</groupId>
+      <artifactId>jetty-server</artifactId>
+      <version>${jettyVersion}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.eclipse.jetty</groupId>
+      <artifactId>jetty-webapp</artifactId>
+      <version>${jettyVersion}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.eclipse.jetty</groupId>
+      <artifactId>jetty-servlet</artifactId>
+      <version>${jettyVersion}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>com.beust</groupId>
+      <artifactId>jcommander</artifactId>
+      <version>${jcommander.version}</version>
+    </dependency>
+  </dependencies>
+</project>

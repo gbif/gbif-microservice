@@ -4,7 +4,7 @@ gbif-microservice
 This project contains the basic functionality to wrap an existing web application into runnable jar file that embedded
 a Jetty server that expose.
 
-Build the project
+Building the project
 =================
 Execute "mvn clean package -U". A Maven profile is not needed.
 
@@ -38,4 +38,4 @@ An application that uses this project can be executed using the following named 
     -zkPath
        Zookeeper path to store the discovery service information
 
-*: marks the required parameters.
+* required parameters.

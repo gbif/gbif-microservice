@@ -19,9 +19,6 @@ import org.slf4j.LoggerFactory;
  */
 public class Application {
 
-  //Default name of the environment variable used to register the configuration file
-  private static final String APP_CONF_ENV = "app.conf";
-
   private static final Logger LOG = LoggerFactory.getLogger(Application.class);
 
   /**
@@ -60,7 +57,7 @@ public class Application {
    * The configuration file is later used for Guice modules.
    */
   private static void registerConfVariable(String confFile) {
-    System.setProperty(APP_CONF_ENV, confFile);
+    System.setProperty(ConfUtils.APP_CONF_ENV, confFile);
     LOG.info("Configuration file registered : " + confFile);
   }
 }

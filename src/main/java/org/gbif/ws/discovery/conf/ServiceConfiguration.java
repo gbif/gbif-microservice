@@ -62,7 +62,7 @@ public class ServiceConfiguration {
     this.zkHost = zkHost;
   }
 
-  public boolean runsInContainer() {
+  public boolean isRunsInContainer() {
     return containerName != null;
   }
 

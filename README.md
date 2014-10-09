@@ -50,14 +50,8 @@ To enable this project in a web application follow the procedure described below
          <properties>
            <maven-shade-plugin.version>2.3</maven-shade-plugin.version>
            <gbif-microservice.version>0.1-SNAPSHOT</gbif-microservice.version>
-         </properties>
-      1.3 Add the gbif-microservice dependency:
-          <dependency>
-            <groupId>org.gbif</groupId>
-            <artifactId>gbif-microservice</artifactId>
-            <version>${gbif-microservice.version}</version>
-          </dependency>
-      1.4 Add the maven shade plugin, exclude any properties file that don't need in the output jar file (see comment below in the example):
+         </properties>      
+      1.3 Add the maven shade plugin, exclude any properties file that don't need in the output jar file (see comment below in the example):
          <plugin>
            <groupId>org.apache.maven.plugins</groupId>
            <artifactId>maven-shade-plugin</artifactId>
@@ -106,6 +100,26 @@ To enable this project in a web application follow the procedure described below
            </executions>
          </plugin>
          
+      1.4 Add the gbif-microservice dependency:
+          <dependency>
+            <groupId>org.gbif</groupId>
+            <artifactId>gbif-microservice</artifactId>
+            <version>${gbif-microservice.version}</version>
+          </dependency>
+      1.5 Modify the servlet api scope: some projects use the servlet api with 'provided' scope, that should be changed to 'compile':
+          <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>servlet-api</artifactId>
+            <scope>compile</scope>
+          </dependency>
+      1.6 Verify if the dependency 'gbif-common' is required (i.e. 'dependency:analyze' reports it as a used undeclared dependency):
+          <dependency>
+            <groupId>org.gbif</groupId>
+            <artifactId>gbif-commons</artifactId>
+            <scope>latest version!</scope>
+          </dependency>
+          Note: this dependency is used to load properties file from an absolute path.
+         
  2. Modify the GbifListener subclass:
     2.1 Add a variable that keeps the default configuration file name, that variables is created by the org.gbif.ws.app.Application class:       
     2.2 Use this variable in the constructor of GbifListener subclass.
@@ -117,14 +131,7 @@ To enable this project in a web application follow the procedure described below
         super(PropertiesUtil.readFromFile(ConfUtils.getAppConfFile("myapp.properties")), "org.gbif.ws", ...);
       }
 
- 3. Modify the servlet api scope: some projects use the servlet api with 'provided' scope, that should be changed to 'compile':
-    <dependency>
-      <groupId>javax.servlet</groupId>
-      <artifactId>servlet-api</artifactId>
-      <scope>compile</scope>
-    </dependency>
-    
- 4. If the ws-client of the project that is being modified contains a reference to this project with the classifier 'classes', remove it:
+ 3. If the ws-client of the project that is being modified contains a reference to this project with the classifier 'classes', remove it:
     <dependency>
       <groupId>org.gbif</groupId>
       <artifactId>server-ws</artifactId>

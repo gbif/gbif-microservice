@@ -106,13 +106,19 @@ To enable this project in a web application follow the procedure described below
             <artifactId>gbif-microservice</artifactId>
             <version>${gbif-microservice.version}</version>
           </dependency>
-      1.5 Modify the servlet api scope: some projects use the servlet api with 'provided' scope, that should be changed to 'compile':
+      1.5 Add the "webapp" directory to the root path in the jar file by using the following resource declaration in the "resources" section:
+          <resource>
+            <directory>src/main/webapp</directory>
+            <filtering>true</filtering>
+            <targetPath>webapp</targetPath>
+          </resource>
+      1.6 Modify the servlet api scope: some projects use the servlet api with 'provided' scope, that should be changed to 'compile':
           <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>servlet-api</artifactId>
             <scope>compile</scope>
           </dependency>
-      1.6 Verify if the dependency 'gbif-common' is required (i.e. 'dependency:analyze' reports it as a used undeclared dependency):
+      1.7 Verify if the dependency 'gbif-common' is required (i.e. 'dependency:analyze' reports it as a used undeclared dependency):
           <dependency>
             <groupId>org.gbif</groupId>
             <artifactId>gbif-commons</artifactId>

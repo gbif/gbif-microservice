@@ -1,5 +1,9 @@
 package org.gbif.jetty;
 
+import java.net.URISyntaxException;
+
+import com.google.common.base.Throwables;
+import com.google.common.io.Resources;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.handler.ContextHandler;
 import org.eclipse.jetty.webapp.WebAppContext;
@@ -9,8 +13,8 @@ import org.eclipse.jetty.webapp.WebAppContext;
  */
 public class ContextFactory {
 
-  private static final String WEB_DIR = "src/main/webapp/";
-  private static final String DESCRIPTOR_PATH = WEB_DIR + "WEB-INF/web.xml";
+  private static final String WEB_DIR = "webapp";
+  private static final String DESCRIPTOR_PATH = "/WEB-INF/web.xml";
   private static final String ROOT_CONTEXT = "/";
   private static final String STOP_CONTEXT = "/stop";
 
@@ -22,13 +26,20 @@ public class ContextFactory {
    * - The context will be attached to the application connector.
    */
   public static ContextHandler buildApplicationContext() {
-    final WebAppContext root = new WebAppContext();
-    root.setContextPath(ROOT_CONTEXT);
-    root.setDescriptor(DESCRIPTOR_PATH);
-    root.setResourceBase(WEB_DIR);
-    root.setParentLoaderPriority(true);
-    root.setConnectorNames(new String[] {HttpConnectorFactory.APP_CONNECTOR_NAME});
-    return root;
+    try {
+      //the webapp directory must be loaded from inside the jar file
+      final String resourceBase = ContextFactory.class.getClassLoader().getResource(WEB_DIR).toURI().toString();
+      final WebAppContext root = new WebAppContext();
+      root.setContextPath(ROOT_CONTEXT);
+      root.setDescriptor(resourceBase + DESCRIPTOR_PATH);
+      root.setResourceBase(resourceBase);
+      root.setParentLoaderPriority(true);
+      root.setConnectorNames(new String[] {HttpConnectorFactory.APP_CONNECTOR_NAME});
+      return root;
+    } catch (URISyntaxException ex){
+      Throwables.propagate(ex);
+      throw new RuntimeException(ex); //to make javac happy
+    }
   }
 
   /**

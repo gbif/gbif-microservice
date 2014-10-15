@@ -1,7 +1,8 @@
 package org.gbif.jetty;
 
 import org.eclipse.jetty.server.Connector;
-import org.eclipse.jetty.server.nio.SelectChannelConnector;
+import org.eclipse.jetty.server.Server;
+import org.eclipse.jetty.server.ServerConnector;
 
 /**
  * Factory class that provides instances of the Connectors used by an application.
@@ -18,6 +19,9 @@ public class HttpConnectorFactory {
   //Connector name
   private String name;
 
+  //Jetty server
+  private Server server;
+
   /**
    * Creates an instance of the admin connector.
    * The default values for this instance are:
@@ -25,10 +29,11 @@ public class HttpConnectorFactory {
    * - port: 8081
    * - threadPool: QueuedThreadPool(maxThreadPoolSize)
    */
-  public static HttpConnectorFactory admin() {
+  public static HttpConnectorFactory admin(Server server) {
     final HttpConnectorFactory httpConnectorFactory = new HttpConnectorFactory();
     httpConnectorFactory.port = 8081;  //default admin port
     httpConnectorFactory.name = ADMIN_CONNECTOR_NAME;
+    httpConnectorFactory.server = server;
     return httpConnectorFactory;
   }
 
@@ -40,9 +45,10 @@ public class HttpConnectorFactory {
    * - port: 8080
    * - threadPool: none
    */
-  public static HttpConnectorFactory application() {
+  public static HttpConnectorFactory application(Server server) {
     final HttpConnectorFactory httpConnectorFactory = new HttpConnectorFactory();
     httpConnectorFactory.name = APP_CONNECTOR_NAME;
+    httpConnectorFactory.server = server;
     return httpConnectorFactory;
   }
 
@@ -78,14 +84,21 @@ public class HttpConnectorFactory {
     this.name = name;
   }
 
+  public Server getServer() {
+    return server;
+  }
+
+  public void setServer(Server server) {
+    this.server = server;
+  }
+
   /**
    * Builds an instance of a Connector using the values provider by the HttpConnectorFactory instance.
    */
   public Connector build() {
-    final SelectChannelConnector httpConnector = new SelectChannelConnector();
+    final ServerConnector httpConnector = new ServerConnector(server);
     httpConnector.setPort(port);
-    httpConnector.setMaxIdleTime(idleTimeout);
-    httpConnector.setRequestHeaderSize(maxRequestHeaderSize);
+    httpConnector.setIdleTimeout(idleTimeout);
     httpConnector.setName(name);
     return httpConnector;
   }

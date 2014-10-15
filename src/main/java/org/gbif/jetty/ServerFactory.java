@@ -48,8 +48,8 @@ public class ServerFactory {
    */
   public Server build(ServiceConfiguration configuration) {
     Server server = new Server();
-    server.setConnectors(buildConnectors(configuration));
-    server.setGracefulShutdown(gracefulShutdown);
+    server.setConnectors(buildConnectors(configuration,server));
+    server.setStopTimeout(gracefulShutdown);
     server.setHandler(buildContexts(server, configuration.getStopSecret()));
     if (configuration.isDiscoverable()) { //Register the discovery lifecycle
       server.addLifeCycleListener(new DiscoveryLifeCycle(configuration));
@@ -60,10 +60,10 @@ public class ServerFactory {
   /**
    * Builds the admin and application connectors.
    */
-  private Connector[] buildConnectors(ServiceConfiguration configuration) {
-    final HttpConnectorFactory appConnectorFactory = HttpConnectorFactory.application();
+  private Connector[] buildConnectors(ServiceConfiguration configuration, Server server) {
+    final HttpConnectorFactory appConnectorFactory = HttpConnectorFactory.application(server);
     appConnectorFactory.setPort(configuration.getHttpPort());
-    final HttpConnectorFactory adminConnectorFactory = HttpConnectorFactory.admin();
+    final HttpConnectorFactory adminConnectorFactory = HttpConnectorFactory.admin(server);
     adminConnectorFactory.setPort(configuration.getHttpAdminPort());
     return new Connector[] {appConnectorFactory.build(), adminConnectorFactory.build()};
   }

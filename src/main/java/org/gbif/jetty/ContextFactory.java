@@ -3,10 +3,8 @@ package org.gbif.jetty;
 import java.net.URISyntaxException;
 
 import com.google.common.base.Throwables;
-import com.google.common.io.Resources;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.handler.ContextHandler;
-import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.webapp.WebAppContext;
 
 /**
@@ -35,7 +33,7 @@ public class ContextFactory {
       root.setDescriptor(resourceBase + DESCRIPTOR_PATH);
       root.setResourceBase(resourceBase);
       root.setParentLoaderPriority(true);
-      root.setConnectorNames(new String[] {HttpConnectorFactory.APP_CONNECTOR_NAME});
+      root.setVirtualHosts(new String[] {'@' + HttpConnectorFactory.APP_CONNECTOR_NAME});
       return root;
     } catch (URISyntaxException ex){
       Throwables.propagate(ex);
@@ -51,7 +49,7 @@ public class ContextFactory {
     ContextHandler adminContext = new ContextHandler();
     adminContext.setContextPath(ROOT_CONTEXT);
     adminContext.setHandler(new StopHandler(server, secret));
-    adminContext.setConnectorNames(new String[] {HttpConnectorFactory.ADMIN_CONNECTOR_NAME});
+    adminContext.setVirtualHosts(new String[] {'@' + HttpConnectorFactory.ADMIN_CONNECTOR_NAME});
     return adminContext;
   }
 

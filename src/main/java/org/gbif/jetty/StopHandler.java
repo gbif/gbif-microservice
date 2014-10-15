@@ -4,27 +4,24 @@ import org.gbif.ws.app.ShutdownHolder;
 
 import java.io.IOException;
 import javax.servlet.ServletException;
-import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.google.common.base.Throwables;
-import com.google.common.io.Closer;
 import org.eclipse.jetty.http.HttpStatus;
 import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.server.Server;
-import org.eclipse.jetty.server.handler.AbstractHandler;
+import org.eclipse.jetty.server.handler.HandlerWrapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
  * Handles the event of stopping the Jetty server.
  */
-public class StopHandler extends AbstractHandler {
+public class StopHandler extends HandlerWrapper {
 
   private static final Logger LOG = LoggerFactory.getLogger(StopHandler.class);
   private static final String SECRET_PARAM = "secret";
-  private static final String SECRET_ERROR_MSG = "The secret parameter provided is invalid";
 
   //Jetty server to be stopped
   private final Server server;
@@ -42,16 +39,20 @@ public class StopHandler extends AbstractHandler {
 
   /**
    * Initiates the stop process.
-   * Any unforeseen error returns a INTERNAL_SERVER_ERROR_500.
+   * Any unforeseen error returns a INTERNAL_SERVER_ERROR.
    */
   @Override
   public void handle(
     String target, Request baseRequest, HttpServletRequest request, HttpServletResponse response
   ) throws IOException, ServletException {
     try {
-      stopServer(request, response);
+      if (target.equals(ContextFactory.STOP_CONTEXT)) {
+        stopServer(request, response);
+      } else {
+        super.handle(target,baseRequest,request,response);
+      }
     } catch (Exception ex) {
-      response.setStatus(HttpStatus.INTERNAL_SERVER_ERROR_500);
+      response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
     }
   }
 
@@ -63,17 +64,12 @@ public class StopHandler extends AbstractHandler {
    * The stop process is performed in separate thread to avoid race conditions with the actual Http call.
    */
   private void stopServer(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    response.setContentType("text/plain");
-    Closer closer = Closer.create();
-    ServletOutputStream os = response.getOutputStream();
     //Validates the secret
     if (request.getParameterMap().containsKey(SECRET_PARAM) && secret.equals(request.getParameter(SECRET_PARAM))) {
-      LOG.warn("Stopping Jetty");
+      LOG.info("Stopping Jetty");
       response.setStatus(HttpStatus.ACCEPTED_202);
-      os.println("Shutting down.");
-      os.close();
       response.flushBuffer();
-      try { // Stops the server in a new thread to guarantee the execution of the current reponse
+      try { // Stops the server in a new thread to guarantee the execution of the current response
         new Thread() {
           @Override
           public void run() {
@@ -86,10 +82,7 @@ public class StopHandler extends AbstractHandler {
         Throwables.propagate(ex);
       }
     } else { //invalid secret parameter
-      response.setStatus(HttpStatus.FORBIDDEN_403);
-      os.println(SECRET_ERROR_MSG);
-      os.close();
-      response.flushBuffer();
+      response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
     }
   }
 }

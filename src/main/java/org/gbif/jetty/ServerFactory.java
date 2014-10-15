@@ -50,7 +50,6 @@ public class ServerFactory {
     Server server = new Server();
     server.setConnectors(buildConnectors(configuration));
     server.setGracefulShutdown(gracefulShutdown);
-    server.setStopAtShutdown(stopAtShutdown);
     server.setHandler(buildContexts(server, configuration.getStopSecret()));
     if (configuration.isDiscoverable()) { //Register the discovery lifecycle
       server.addLifeCycleListener(new DiscoveryLifeCycle(configuration));
@@ -75,7 +74,7 @@ public class ServerFactory {
   private ContextHandlerCollection buildContexts(Server server, String secret) {
     ContextHandlerCollection contexts = new ContextHandlerCollection();
     contexts.setHandlers(new Handler[] {ContextFactory.buildApplicationContext(),
-      ContextFactory.buildStopContext(server, secret)});
+      ContextFactory.buildAdminContext(server, secret)});
     return contexts;
   }
 }

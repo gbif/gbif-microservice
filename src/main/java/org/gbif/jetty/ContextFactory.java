@@ -6,6 +6,7 @@ import com.google.common.base.Throwables;
 import com.google.common.io.Resources;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.handler.ContextHandler;
+import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.webapp.WebAppContext;
 
 /**
@@ -15,8 +16,8 @@ public class ContextFactory {
 
   private static final String WEB_DIR = "webapp";
   private static final String DESCRIPTOR_PATH = "/WEB-INF/web.xml";
-  private static final String ROOT_CONTEXT = "/";
-  private static final String STOP_CONTEXT = "/stop";
+  public static final String ROOT_CONTEXT = "/";
+  public static final String STOP_CONTEXT = "/stop";
 
   /**
    * Builds an WebAppContext that follows the standard Maven web application.
@@ -46,12 +47,12 @@ public class ContextFactory {
    * Creates a ContextHandler with a handler to stop the application gracefully.
    * The context will be attached to the admin connector and accessible at the context "/stop".
    */
-  public static ContextHandler buildStopContext(Server server, String secret) {
-    ContextHandler stopContext = new ContextHandler();
-    stopContext.setContextPath(STOP_CONTEXT);
-    stopContext.setHandler(new StopHandler(server, secret));
-    stopContext.setConnectorNames(new String[] {HttpConnectorFactory.ADMIN_CONNECTOR_NAME});
-    return stopContext;
+  public static ContextHandler buildAdminContext(Server server, String secret) {
+    ContextHandler adminContext = new ContextHandler();
+    adminContext.setContextPath(ROOT_CONTEXT);
+    adminContext.setHandler(new StopHandler(server, secret));
+    adminContext.setConnectorNames(new String[] {HttpConnectorFactory.ADMIN_CONNECTOR_NAME});
+    return adminContext;
   }
 
   /**

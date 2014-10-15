@@ -2,8 +2,6 @@ package org.gbif.jetty;
 
 import org.eclipse.jetty.server.Connector;
 import org.eclipse.jetty.server.nio.SelectChannelConnector;
-import org.eclipse.jetty.util.thread.QueuedThreadPool;
-import org.eclipse.jetty.util.thread.ThreadPool;
 
 /**
  * Factory class that provides instances of the Connectors used by an application.
@@ -19,10 +17,6 @@ public class HttpConnectorFactory {
   private int port = 8080;  //default http port
   //Connector name
   private String name;
-  //Used for the admin connector only
-  private ThreadPool threadPool;
-  //The same algorithm used by the jetty SelectorChannelConnector
-  private int maxThreadPoolSize = Math.max(1, (Runtime.getRuntime().availableProcessors() + 3) / 4);
 
   /**
    * Creates an instance of the admin connector.
@@ -35,7 +29,6 @@ public class HttpConnectorFactory {
     final HttpConnectorFactory httpConnectorFactory = new HttpConnectorFactory();
     httpConnectorFactory.port = 8081;  //default admin port
     httpConnectorFactory.name = ADMIN_CONNECTOR_NAME;
-    httpConnectorFactory.threadPool = new QueuedThreadPool(httpConnectorFactory.maxThreadPoolSize);
     return httpConnectorFactory;
   }
 
@@ -85,34 +78,15 @@ public class HttpConnectorFactory {
     this.name = name;
   }
 
-  public ThreadPool getThreadPool() {
-    return threadPool;
-  }
-
-  public void setThreadPool(ThreadPool threadPool) {
-    this.threadPool = threadPool;
-  }
-
-  public int getMaxThreadPoolSize() {
-    return maxThreadPoolSize;
-  }
-
-  public void setMaxThreadPoolSize(int maxThreadPoolSize) {
-    this.maxThreadPoolSize = maxThreadPoolSize;
-  }
-
   /**
    * Builds an instance of a Connector using the values provider by the HttpConnectorFactory instance.
    */
   public Connector build() {
     final SelectChannelConnector httpConnector = new SelectChannelConnector();
     httpConnector.setPort(port);
-    httpConnector.setMaxIdleTime(maxRequestHeaderSize);
-    httpConnector.setRequestHeaderSize(idleTimeout);
+    httpConnector.setMaxIdleTime(idleTimeout);
+    httpConnector.setRequestHeaderSize(maxRequestHeaderSize);
     httpConnector.setName(name);
-    if (threadPool != null) { //thread pools are set for the admin connector only
-      httpConnector.setThreadPool(threadPool);
-    }
     return httpConnector;
   }
 

@@ -20,11 +20,14 @@ public class ShutdownHolder {
   public static void stopServer(Server server) {
     if (server.isStarted() || server.isRunning()) {
       try {
+        server.setStopAtShutdown(true);
         LOG.info("Shutting down Jetty...");
         server.stop();
         LOG.info("Jetty has stopped.");
+      } catch (InterruptedException ex) {
+        LOG.warn("Shutdown process interrupted" , ex);
       } catch (Exception ex) {
-        LOG.error("Error when stopping Jetty: " + ex.getMessage(), ex);
+        LOG.error("Error when stopping Jetty", ex);
       }
     }
   }

@@ -17,6 +17,9 @@ public class ContextFactory {
   public static final String ROOT_CONTEXT = "/";
   public static final String STOP_CONTEXT = "/stop";
 
+  //The @ is used by Jetty to find registered connectors
+  private static final String VH_HOST_FMT = "@%s";
+
   /**
    * Builds an WebAppContext that follows the standard Maven web application.
    * - The resource base points to  "src/main/webapp/"
@@ -33,7 +36,8 @@ public class ContextFactory {
       root.setDescriptor(resourceBase + DESCRIPTOR_PATH);
       root.setResourceBase(resourceBase);
       root.setParentLoaderPriority(true);
-      root.setVirtualHosts(new String[] {'@' + HttpConnectorFactory.APP_CONNECTOR_NAME});
+      //set the connector
+      root.setVirtualHosts(new String[] {String.format(VH_HOST_FMT,HttpConnectorFactory.APP_CONNECTOR_NAME)});
       return root;
     } catch (URISyntaxException ex){
       Throwables.propagate(ex);
@@ -49,7 +53,8 @@ public class ContextFactory {
     ContextHandler adminContext = new ContextHandler();
     adminContext.setContextPath(ROOT_CONTEXT);
     adminContext.setHandler(new StopHandler(server, secret));
-    adminContext.setVirtualHosts(new String[] {'@' + HttpConnectorFactory.ADMIN_CONNECTOR_NAME});
+    //set the connector
+    adminContext.setVirtualHosts(new String[] {String.format(VH_HOST_FMT,HttpConnectorFactory.ADMIN_CONNECTOR_NAME)});
     return adminContext;
   }
 

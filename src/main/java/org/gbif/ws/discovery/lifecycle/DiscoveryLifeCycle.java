@@ -22,17 +22,17 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Listener that handles the registration process of the executing application into the Zookeeper discovery service.
+ * Listener that handles the registration process of the executing application into the Zookeeper discoveryService service.
  */
 public class DiscoveryLifeCycle implements LifeCycle.Listener {
 
   private static final Logger LOG = LoggerFactory.getLogger(DiscoveryLifeCycle.class);
   private final ServiceConfiguration configuration;
-  private ServiceDiscovery<ServiceDetails> discovery;
+  private ServiceDiscovery<ServiceDetails> discoveryService;
   private CuratorFramework curatorClient;
   private ServiceInstance<ServiceDetails> serviceInstance;
-  // Keeps references to the closable elements: curatorClient and discovery.
-  private Closer closer = Closer.create();
+  // Keeps references to the closable elements: curatorClient and discoveryService.
+  private final Closer closer = Closer.create();
 
   /**
    * Creates an instance using the fields zkPath and zkHost of the configuration class.
@@ -42,18 +42,18 @@ public class DiscoveryLifeCycle implements LifeCycle.Listener {
   }
 
   /**
-   * Required services, curator client and discovery services, are instantiated while  the application is starting.
+   * Required services, curator client and discoveryService services, are instantiated while  the application is starting.
    */
   @Override
   public void lifeCycleStarting(LifeCycle event) {
     curatorClient = curator(configuration);
     LOG.info("Curator client started");
-    discovery = discovery(configuration);
+    discoveryService = discovery();
     LOG.info("Discovery service created");
   }
 
   /**
-   * Once the application is started the service is registered in the discovery services.
+   * Once the application is started the service is registered in the discoveryService services.
    */
   @Override
   public void lifeCycleStarted(LifeCycle event) {
@@ -89,8 +89,8 @@ public class DiscoveryLifeCycle implements LifeCycle.Listener {
 
   public void unRegisterService() {
     try {
-      if (discovery != null && serviceInstance != null) {
-        discovery.unregisterService(serviceInstance);
+      if (discoveryService != null && serviceInstance != null) {
+        discoveryService.unregisterService(serviceInstance);
         LOG.info("Service instance has been unregistered");
       }
       closer.close();
@@ -102,12 +102,12 @@ public class DiscoveryLifeCycle implements LifeCycle.Listener {
   }
 
   /**
-   * Registers a new service instance in Zookeeper using the ServiceDiscovery
+   * Registers a new service instance in Zookeeper using the ServiceDiscovery.
    */
   public void registerService(ServiceConfiguration configuration) {
     try {
-      serviceInstance = serviceInstance(configuration);
-      discovery.registerService(serviceInstance);
+      serviceInstance = registerServiceInstance(configuration);
+      discoveryService.registerService(serviceInstance);
     } catch (Exception e) {
       LOG.error("Error registering the service", e);
       Throwables.propagate(e);
@@ -133,7 +133,6 @@ public class DiscoveryLifeCycle implements LifeCycle.Listener {
    */
   public CuratorFramework curator(ServiceConfiguration configuration) {
     CuratorFramework curator = CuratorFrameworkFactory.builder()
-      .connectString(configuration.getZkHost())
       .namespace(configuration.getZkPath())
       .retryPolicy(new ExponentialBackoffRetry(1000, 3))
       .build();
@@ -144,7 +143,7 @@ public class DiscoveryLifeCycle implements LifeCycle.Listener {
   /**
    * Builds a new instance of a ServiceDiscovery.
    */
-  protected ServiceDiscovery<ServiceDetails> discovery(ServiceConfiguration configuration) {
+  protected ServiceDiscovery<ServiceDetails> discovery() {
     JsonInstanceSerializer<ServiceDetails> serializer =
       new JsonInstanceSerializer<ServiceDetails>(ServiceDetails.class);
     return closer.register(ServiceDiscoveryBuilder.builder(ServiceDetails.class)
@@ -155,9 +154,9 @@ public class DiscoveryLifeCycle implements LifeCycle.Listener {
   }
 
   /**
-   * Builds a new instance of a ServiceInstance.
+   * Registers a new instance of a ServiceInstance.
    */
-  private ServiceInstance<ServiceDetails> serviceInstance(ServiceConfiguration configuration) {
+  private ServiceInstance<ServiceDetails> registerServiceInstance(ServiceConfiguration configuration) {
     try {
       final ServiceDetails serviceDetails = serviceDetails(configuration);
       return ServiceInstance.<ServiceDetails>builder()
@@ -166,9 +165,6 @@ public class DiscoveryLifeCycle implements LifeCycle.Listener {
         .port(configuration.getHttpPort())
         .uriSpec(new UriSpec(serviceDetails.getExternalUrl()))
         .build();
-    } catch (IOException e) {
-      LOG.error("Error creating a service instance", e);
-      Throwables.propagate(e);
     } catch (Exception e) {
       LOG.error("Error creating a service instance", e);
       Throwables.propagate(e);

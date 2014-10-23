@@ -41,7 +41,7 @@ public class ContextFactory {
       return root;
     } catch (URISyntaxException ex){
       Throwables.propagate(ex);
-      throw new RuntimeException(ex); //to make javac happy
+      throw new IllegalStateException(ex); //to make javac happy
     }
   }
 

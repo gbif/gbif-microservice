@@ -7,7 +7,7 @@ import com.google.common.base.Objects;
  */
 public class ServiceDetails {
 
-  private final static String URL_FMT = "http://%s:%s";
+  private static final String URL_FMT = "http://%s:%s";
 
   // Maven settings
   private String groupId;

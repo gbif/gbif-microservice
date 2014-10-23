@@ -22,18 +22,29 @@ public class Application {
   private static final Logger LOG = LoggerFactory.getLogger(Application.class);
 
   /**
+   * Private constructor.
+   */
+  private Application(){
+    //No instances of this class should be created
+  }
+
+  /**
    * Entry point to execute the application.
    * The accepted parameters can be found in the class ServiceConfiguration.
    */
-  public static void main(String[] args) throws Exception {
+  public static void main(String[] args) {
     LOG.info("Starting the Jetty server");
-    final ServiceConfiguration configuration = parseConfiguration(args);
-    final Server server = new ServerFactory().build(configuration);
-    new ShutdownHolder(server);
-    registerConfVariable(configuration.getConf());
-    server.start();
-    server.join();
-    LOG.info("Jetty has been started");
+    try {
+      final ServiceConfiguration configuration = parseConfiguration(args);
+      final Server server = new ServerFactory().build(configuration);
+      new ShutdownHolder(server);
+      registerConfVariable(configuration.getConf());
+      server.start();
+      server.join();
+      LOG.info("Jetty has been started");
+    } catch(Exception ex){
+      LOG.error("An error occurred starting Jetty",ex);
+    }
   }
 
   /**

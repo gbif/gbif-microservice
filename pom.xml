@@ -43,6 +43,7 @@
     <maven-model.version>3.1.1</maven-model.version>
     <servlet-api.version>3.1.0</servlet-api.version>
     <logback.version>1.0.11</logback.version>
+    <maven-compiler-plugin.version>3.1</maven-compiler-plugin.version>
   </properties>
 
   <scm>
@@ -72,6 +73,19 @@
       <url>http://repository.gbif.org/content/repositories/thirdparty</url>
     </repository>
   </repositories>
+
+  <build>
+    <plugins>
+      <plugin>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>${maven-compiler-plugin.version}</version>
+        <configuration>
+          <source>1.7</source>
+          <target>1.7</target>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
 
   <dependencies>
 

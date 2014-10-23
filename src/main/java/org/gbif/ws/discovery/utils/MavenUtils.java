@@ -2,6 +2,7 @@ package org.gbif.ws.discovery.utils;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Enumeration;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
@@ -29,22 +30,13 @@ public class MavenUtils {
    * Reads the pom.xml file and returns a MavenProjects instance.
    */
   public static MavenProject getMavenProject() throws IOException {
-    Closer closer = Closer.create();
-    try {
+    try(InputStream pomFile = (MavenUtils.class.getResourceAsStream(getPOMPath()))) {
       MavenXpp3Reader mavenReader = new MavenXpp3Reader();
-      Model model = mavenReader.read(closer.register(MavenUtils.class.getResourceAsStream(getPOMPath())));
+      Model model = mavenReader.read(pomFile);
       return new MavenProject(model);
-    } catch (FileNotFoundException e) {
+    } catch (IOException|XmlPullParserException e) {
       LOG.error(ERROR_MSG, e);
       Throwables.propagate(e);
-    } catch (IOException e) {
-      LOG.error(ERROR_MSG, e);
-      Throwables.propagate(e);
-    } catch (XmlPullParserException e) {
-      LOG.error(ERROR_MSG, e);
-      Throwables.propagate(e);
-    } finally {
-      closer.close();
     }
     throw new IllegalStateException("An error occurred reading the pom.xml file");
   }
@@ -53,11 +45,9 @@ public class MavenUtils {
    * Gets the path to the pom.xml file that is inside the jar file.
    */
   private static String getPOMPath() throws IOException {
-    Closer closer = Closer.create();
     String jarPath = MavenUtils.class.getResource("").getPath().replaceAll("file:", "");
     jarPath = jarPath.replaceAll("!/" + MavenUtils.class.getPackage().getName().replaceAll("\\.", "/") + '/', "");
-    try {
-      JarFile jarFile = closer.register(new JarFile(jarPath));
+    try (JarFile jarFile = new JarFile(jarPath)) {
       Enumeration<JarEntry> entries = jarFile.entries();
       while (entries.hasMoreElements()) {
         JarEntry jarEntry = entries.nextElement();
@@ -65,8 +55,6 @@ public class MavenUtils {
           return '/' + jarEntry.getName();
         }
       }
-    } finally {
-      closer.close();
     }
     throw new IllegalStateException("Error reading pom.xml file");
   }

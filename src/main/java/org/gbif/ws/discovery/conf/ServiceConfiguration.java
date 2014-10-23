@@ -32,12 +32,12 @@ public class ServiceConfiguration {
   private Long timestamp;
 
   @Parameter(names = "-externalPort",
-             description = "External port that maps the default httpPort, must be used then the Http is not visible out of the server, e.g: Linux containers.",
+             description = "External port mapping used if the httpPort is not reachable, e.g: Linux containers.",
              required = false)
   private Integer externalPort;
 
   @Parameter(names = "-externalAdminPort",
-             description = "External admin port that maps the default httpPort, must be used then the Http is not visible out of the server, e.g: Linux containers.",
+             description = "External port mapping used if the httpAdminPort is not reachable, e.g: Linux containers.",
              required = false)
   private Integer externalAdminPort;
 

@@ -133,6 +133,7 @@ public class DiscoveryLifeCycle implements LifeCycle.Listener {
    */
   public CuratorFramework curator(ServiceConfiguration configuration) {
     CuratorFramework curator = CuratorFrameworkFactory.builder()
+      .connectString(configuration.getZkHost())
       .namespace(configuration.getZkPath())
       .retryPolicy(new ExponentialBackoffRetry(1000, 3))
       .build();

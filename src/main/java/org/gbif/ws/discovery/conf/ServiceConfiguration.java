@@ -2,11 +2,14 @@ package org.gbif.ws.discovery.conf;
 
 import com.beust.jcommander.Parameter;
 import com.google.common.base.Strings;
+import org.codehaus.jackson.annotate.JsonIgnore;
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 
 /**
  * Configuration class of services hosted by container.
  * Each element of the configuration is self-explanatory with the JCommander annotation @Parameter.
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class ServiceConfiguration {
 
   @Parameter(names = "-httpPort", description = "Http port", required = true)

@@ -1,10 +1,12 @@
 package org.gbif.ws.discovery.conf;
 
 import com.google.common.base.Objects;
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 
 /**
  * This class contains the information that is published in the discovery service registry (Zookeeper).
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class ServiceDetails {
 
   private static final String URL_FMT = "http://%s:%s/";

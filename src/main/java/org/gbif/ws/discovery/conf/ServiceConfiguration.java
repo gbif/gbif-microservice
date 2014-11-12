@@ -31,7 +31,7 @@ public class ServiceConfiguration {
   @Parameter(names = "-stopSecret", description = "Secret/password to stop the server", required = true)
   private String stopSecret;
 
-  @Parameter(names = "-timestamp", description = "Timestamp that identifies this service instance", required = true)
+  @Parameter(names = "-timestamp", description = "Timestamp that identifies this service instance", required = false)
   private Long timestamp;
 
   @Parameter(names = "-externalPort",
@@ -46,7 +46,7 @@ public class ServiceConfiguration {
 
   @Parameter(names = "-host",
              description = "Application server or control host that runs the service instance",
-             required = true)
+             required = false)
   private String host;
 
   @Parameter(names = "-containerName",

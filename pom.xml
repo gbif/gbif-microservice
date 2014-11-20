@@ -17,14 +17,6 @@
   <url>http://sites.gbif.org/common-resources/gbif-microservice</url>
 
   <distributionManagement>
-    <repository>
-      <id>labs-releases</id>
-      <url>http://repository.gbif.org/content/repositories/labs-releases</url>
-    </repository>
-    <snapshotRepository>
-      <id>labs-snapshots</id>
-      <url>http://repository.gbif.org/content/repositories/labs-snapshots</url>
-    </snapshotRepository>
     <site>
       <id>gbif-site</id>
       <name>Site for the gbif-microservice project</name>

@@ -16,14 +16,6 @@
   <description>Common utils and other classes in use by GBIF web projects that an embedded jetty server and curator discovery services.</description>
   <url>http://sites.gbif.org/common-resources/gbif-microservice</url>
 
-  <distributionManagement>
-    <site>
-      <id>gbif-site</id>
-      <name>Site for the gbif-microservice project</name>
-      <url>scp://tools.gbif.org:/var/www/html/sites/common-resources/gbif-microservice</url>
-    </site>
-  </distributionManagement>
-
   <properties>
     <curator.version>2.6.0</curator.version>
     <maven-core.version>3.1.1</maven-core.version>

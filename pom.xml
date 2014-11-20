@@ -4,7 +4,7 @@
   <parent>
     <groupId>org.gbif</groupId>
     <artifactId>motherpom</artifactId>
-    <version>11</version>
+    <version>16</version>
   </parent>
 
   <artifactId>gbif-microservice</artifactId>
@@ -13,7 +13,7 @@
 
   <name>GBIF Microservice</name>
   <description>Common utils and other classes in use by GBIF web projects that an embedded jetty server and curator discovery services.</description>
-  <url>http://sites.gbif.org/common-resources/gbif-microservice</url>
+  <url>http://github.com/gbif/gbif-microservice</url>
 
   <properties>
     <curator.version>2.6.0</curator.version>

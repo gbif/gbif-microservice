@@ -49,7 +49,7 @@ To enable this project in a web application follow the procedure described below
      1.2 Add the following properties:
          <properties>
            <maven-shade-plugin.version>2.3</maven-shade-plugin.version>
-           <gbif-microservice.version>0.1-SNAPSHOT</gbif-microservice.version>
+           <gbif-microservice.version>0.1</gbif-microservice.version>
          </properties>      
       1.3 Add the maven shade plugin, exclude any properties file that don't need in the output jar file (see comment below in the example):
          <plugin>

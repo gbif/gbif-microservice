@@ -4,7 +4,7 @@
   <parent>
     <groupId>org.gbif</groupId>
     <artifactId>motherpom</artifactId>
-    <version>19</version>
+    <version>23-SNAPSHOT</version>
   </parent>
 
   <artifactId>gbif-microservice</artifactId>
@@ -16,7 +16,8 @@
   <url>http://github.com/gbif/gbif-microservice</url>
 
   <properties>
-    <jdkLevel>1.7</jdkLevel>
+    <jdkLevel>1.8</jdkLevel>
+
     <curator.version>2.6.0</curator.version>
     <maven-core.version>3.1.1</maven-core.version>
     <jettyVersion>9.2.7.v20150116</jettyVersion>
@@ -56,6 +57,43 @@
       <url>http://repository.gbif.org/content/repositories/thirdparty</url>
     </repository>
   </repositories>
+
+  <!--<build>-->
+    <!--<plugins>-->
+      <!--<plugin>-->
+        <!--<groupId>org.apache.maven.plugins</groupId>-->
+        <!--<artifactId>maven-shade-plugin</artifactId>-->
+        <!--<version>2.4</version>-->
+        <!--<executions>-->
+          <!--<execution>-->
+            <!--<phase>package</phase>-->
+            <!--<goals>-->
+              <!--<goal>shade</goal>-->
+            <!--</goals>-->
+            <!--<configuration>-->
+              <!--&lt;!&ndash;<finalName>${project.artifactId}</finalName>&ndash;&gt;-->
+              <!--&lt;!&ndash;<shadedArtifactAttached>true</shadedArtifactAttached>&ndash;&gt;-->
+              <!--<artifactSet>-->
+                <!--<includes>-->
+                  <!--<include>com.google.guava:guava</include>-->
+                  <!--<include>org.apache.curator:curator-client</include>-->
+                  <!--<include>org.apache.curator:curator-framework</include>-->
+                  <!--<include>org.apache.curator:curator-recipes</include>-->
+                  <!--<include>org.apache.curator:curator-x-discovery</include>-->
+                <!--</includes>-->
+              <!--</artifactSet>-->
+              <!--<relocations>-->
+                <!--<relocation>-->
+                  <!--<pattern>com.google.common</pattern>-->
+                  <!--<shadedPattern>g16.com.google.common</shadedPattern>-->
+                <!--</relocation>-->
+              <!--</relocations>-->
+            <!--</configuration>-->
+          <!--</execution>-->
+        <!--</executions>-->
+      <!--</plugin>-->
+    <!--</plugins>-->
+  <!--</build>-->
 
   <dependencies>
 

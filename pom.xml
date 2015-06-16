@@ -20,6 +20,7 @@
 
     <curator.version>2.6.0</curator.version>
     <maven-core.version>3.1.1</maven-core.version>
+    <jackson.version>1.9.13</jackson.version>
     <jettyVersion>9.2.7.v20150116</jettyVersion>
     <jcommander.version>1.7</jcommander.version>
     <slf4j.version>1.7.5</slf4j.version>
@@ -58,45 +59,7 @@
     </repository>
   </repositories>
 
-  <!--<build>-->
-    <!--<plugins>-->
-      <!--<plugin>-->
-        <!--<groupId>org.apache.maven.plugins</groupId>-->
-        <!--<artifactId>maven-shade-plugin</artifactId>-->
-        <!--<version>2.4</version>-->
-        <!--<executions>-->
-          <!--<execution>-->
-            <!--<phase>package</phase>-->
-            <!--<goals>-->
-              <!--<goal>shade</goal>-->
-            <!--</goals>-->
-            <!--<configuration>-->
-              <!--&lt;!&ndash;<finalName>${project.artifactId}</finalName>&ndash;&gt;-->
-              <!--&lt;!&ndash;<shadedArtifactAttached>true</shadedArtifactAttached>&ndash;&gt;-->
-              <!--<artifactSet>-->
-                <!--<includes>-->
-                  <!--<include>com.google.guava:guava</include>-->
-                  <!--<include>org.apache.curator:curator-client</include>-->
-                  <!--<include>org.apache.curator:curator-framework</include>-->
-                  <!--<include>org.apache.curator:curator-recipes</include>-->
-                  <!--<include>org.apache.curator:curator-x-discovery</include>-->
-                <!--</includes>-->
-              <!--</artifactSet>-->
-              <!--<relocations>-->
-                <!--<relocation>-->
-                  <!--<pattern>com.google.common</pattern>-->
-                  <!--<shadedPattern>g16.com.google.common</shadedPattern>-->
-                <!--</relocation>-->
-              <!--</relocations>-->
-            <!--</configuration>-->
-          <!--</execution>-->
-        <!--</executions>-->
-      <!--</plugin>-->
-    <!--</plugins>-->
-  <!--</build>-->
-
   <dependencies>
-
     <dependency>
       <groupId>org.apache.maven</groupId>
       <artifactId>maven-core</artifactId>
@@ -167,6 +130,11 @@
       <version>${jettyVersion}</version>
     </dependency>
 
+    <dependency>
+      <groupId>org.codehaus.jackson</groupId>
+      <artifactId>jackson-core-asl</artifactId>
+      <version>${jackson.version}</version>
+    </dependency>
     <dependency>
       <groupId>org.codehaus.plexus</groupId>
       <artifactId>plexus-utils</artifactId>

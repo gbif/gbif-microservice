@@ -21,7 +21,7 @@ public class ConfUtils {
   public static final String APP_CONF_ENV = "app.conf";
 
   /**
-   * Return the path to the configuration file of the current Web application.
+   * Gets the path to the configuration file of the current Web application.
    * Returns the value of the environment variable APP_CONF_ENV, if any; otherwise returns
    * absolute path to the file name  @parameter defaultAppConfFile.
    */

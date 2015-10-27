@@ -74,12 +74,12 @@ public class StopHandler extends HandlerWrapper {
           @Override
           public void run() {
             ShutdownHolder.stopServer(server);
-            System.exit(1);
+            System.exit(0);
           }
         }.start();
       } catch (Exception ex) {
         LOG.error("Unable to stop Jetty", ex);
-        Throwables.propagate(ex);
+        throw Throwables.propagate(ex);
       }
     } else { //invalid secret parameter
       response.sendError(HttpServletResponse.SC_UNAUTHORIZED);

@@ -9,6 +9,7 @@ import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ServiceDetails {
 
+
   private static final String URL_FMT = "http://%s:%s/";
 
   // Maven settings
@@ -17,6 +18,8 @@ public class ServiceDetails {
   private String version;
 
   private ServiceConfiguration serviceConfiguration;
+
+  private ServiceStatus status;
 
   public String getGroupId() {
     return groupId;
@@ -52,6 +55,17 @@ public class ServiceDetails {
 
   public String getName() {
     return artifactId;
+  }
+
+  /**
+   * Service status, this status is published in the service registry.
+   */
+  public ServiceStatus getStatus() {
+    return status;
+  }
+
+  public void setStatus(ServiceStatus status) {
+    this.status = status;
   }
 
   /**

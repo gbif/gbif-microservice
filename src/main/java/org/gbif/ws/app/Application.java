@@ -44,6 +44,7 @@ public class Application {
       LOG.info("Jetty has been started");
     } catch(Exception ex){
       LOG.error("An error occurred starting Jetty",ex);
+      System.exit(1);
     }
   }
 
@@ -58,9 +59,8 @@ public class Application {
       return configuration;
     } catch (ParameterException ex) {
       jCommander.usage();
-      Throwables.propagate(ex);
+      throw Throwables.propagate(ex);
     }
-    return configuration;
   }
 
   /**

@@ -40,8 +40,7 @@ public class ContextFactory {
       root.setVirtualHosts(new String[] {String.format(VH_HOST_FMT,HttpConnectorFactory.APP_CONNECTOR_NAME)});
       return root;
     } catch (URISyntaxException ex){
-      Throwables.propagate(ex);
-      throw new IllegalStateException(ex); //to make javac happy
+      throw Throwables.propagate(ex);
     }
   }
 

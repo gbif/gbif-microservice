@@ -1,6 +1,5 @@
 package org.gbif.ws.discovery.utils;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Enumeration;
@@ -8,7 +7,6 @@ import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
 import com.google.common.base.Throwables;
-import com.google.common.io.Closer;
 import org.apache.maven.model.Model;
 import org.apache.maven.model.io.xpp3.MavenXpp3Reader;
 import org.apache.maven.project.MavenProject;
@@ -36,9 +34,8 @@ public class MavenUtils {
       return new MavenProject(model);
     } catch (IOException|XmlPullParserException e) {
       LOG.error(ERROR_MSG, e);
-      Throwables.propagate(e);
+      throw Throwables.propagate(e);
     }
-    throw new IllegalStateException("An error occurred reading the pom.xml file");
   }
 
   /**

@@ -60,7 +60,7 @@ public class ServerFactory {
   /**
    * Builds the admin and application connectors.
    */
-  private Connector[] buildConnectors(ServiceConfiguration configuration, Server server) {
+  private static Connector[] buildConnectors(ServiceConfiguration configuration, Server server) {
     final HttpConnectorFactory appConnectorFactory = HttpConnectorFactory.application(server);
     appConnectorFactory.setPort(configuration.getHttpPort());
     final HttpConnectorFactory adminConnectorFactory = HttpConnectorFactory.admin(server);
@@ -71,7 +71,7 @@ public class ServerFactory {
   /**
    * Builds the web application and stop contexts.
    */
-  private ContextHandlerCollection buildContexts(Server server, String secret) {
+  private static ContextHandlerCollection buildContexts(Server server, String secret) {
     ContextHandlerCollection contexts = new ContextHandlerCollection();
     contexts.setHandlers(new Handler[] {ContextFactory.buildApplicationContext(),
       ContextFactory.buildAdminContext(server, secret)});

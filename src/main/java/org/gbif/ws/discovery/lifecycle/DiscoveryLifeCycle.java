@@ -2,6 +2,7 @@ package org.gbif.ws.discovery.lifecycle;
 
 import org.gbif.ws.discovery.conf.ServiceConfiguration;
 import org.gbif.ws.discovery.conf.ServiceDetails;
+import org.gbif.ws.discovery.conf.ServiceStatus;
 import org.gbif.ws.discovery.utils.MavenUtils;
 
 import java.io.IOException;
@@ -50,6 +51,9 @@ public class DiscoveryLifeCycle implements LifeCycle.Listener {
     LOG.info("Curator client started");
     discoveryService = discovery();
     LOG.info("Discovery service created");
+    LOG.info("Registering service");
+    registerService(configuration);
+    LOG.info("Service registered {}", serviceInstance.toString());
   }
 
   /**
@@ -57,9 +61,8 @@ public class DiscoveryLifeCycle implements LifeCycle.Listener {
    */
   @Override
   public void lifeCycleStarted(LifeCycle event) {
-    registerService(configuration);
+    updateServiceStatus(ServiceStatus.RUNNING);
     LOG.info("Service registered");
-
   }
 
   /**
@@ -67,6 +70,7 @@ public class DiscoveryLifeCycle implements LifeCycle.Listener {
    */
   @Override
   public void lifeCycleFailure(LifeCycle event, Throwable cause) {
+    updateServiceStatus(ServiceStatus.FAILED);
     unRegisterService();
   }
 
@@ -75,7 +79,7 @@ public class DiscoveryLifeCycle implements LifeCycle.Listener {
    */
   @Override
   public void lifeCycleStopping(LifeCycle event) {
-    unRegisterService();
+    updateServiceStatus(ServiceStatus.STOPPING);
   }
 
   /**
@@ -84,6 +88,8 @@ public class DiscoveryLifeCycle implements LifeCycle.Listener {
    */
   @Override
   public void lifeCycleStopped(LifeCycle event) {
+    updateServiceStatus(ServiceStatus.STOPPED);
+    unRegisterService();
     LOG.info("Discovery services have been stopped");
   }
 
@@ -97,7 +103,7 @@ public class DiscoveryLifeCycle implements LifeCycle.Listener {
       LOG.info("All the resources haven been closed");
     } catch (Exception ex) {
       LOG.error("Error unregistering services", ex);
-      Throwables.propagate(ex);
+      throw Throwables.propagate(ex);
     }
   }
 
@@ -106,11 +112,26 @@ public class DiscoveryLifeCycle implements LifeCycle.Listener {
    */
   public void registerService(ServiceConfiguration configuration) {
     try {
-      serviceInstance = registerServiceInstance(configuration);
+      serviceInstance = registerServiceInstance(configuration, ServiceStatus.STARTING);
       discoveryService.registerService(serviceInstance);
     } catch (Exception e) {
       LOG.error("Error registering the service", e);
-      Throwables.propagate(e);
+      throw Throwables.propagate(e);
+    }
+  }
+
+  /**
+   * Updates the service instance status in Zookeeper.
+   */
+  public void updateServiceStatus(ServiceStatus serviceStatus) {
+    try {
+      if(serviceInstance != null) {
+        serviceInstance.getPayload().setStatus(serviceStatus);
+        discoveryService.updateService(serviceInstance);
+      }
+    } catch (Exception e) {
+      LOG.error("Error updating service status", e);
+      throw Throwables.propagate(e);
     }
   }
 
@@ -118,7 +139,7 @@ public class DiscoveryLifeCycle implements LifeCycle.Listener {
    * Builds a new instance of a ServiceDetails class.
    * Populates the artifact attributes using the Maven pom.xml file.
    */
-  public ServiceDetails serviceDetails(ServiceConfiguration configuration) throws IOException {
+  public static ServiceDetails serviceDetails(ServiceConfiguration configuration) throws IOException {
     MavenProject mavenProject = MavenUtils.getMavenProject();
     ServiceDetails serviceDetails = new ServiceDetails();
     serviceDetails.setServiceConfiguration(configuration);
@@ -155,11 +176,12 @@ public class DiscoveryLifeCycle implements LifeCycle.Listener {
   }
 
   /**
-   * Registers a new instance of a ServiceInstance.
+   * Registers a new instance of a ServiceInstance in a specific status.
    */
-  private ServiceInstance<ServiceDetails> registerServiceInstance(ServiceConfiguration configuration) {
+  private static ServiceInstance<ServiceDetails> registerServiceInstance(ServiceConfiguration configuration, ServiceStatus serviceStatus) {
     try {
-      final ServiceDetails serviceDetails = serviceDetails(configuration);
+      ServiceDetails serviceDetails = serviceDetails(configuration);
+      serviceDetails.setStatus(serviceStatus);
       return ServiceInstance.<ServiceDetails>builder()
         .name(serviceDetails.getName())
         .payload(serviceDetails)
@@ -168,8 +190,7 @@ public class DiscoveryLifeCycle implements LifeCycle.Listener {
         .build();
     } catch (Exception e) {
       LOG.error("Error creating a service instance", e);
-      Throwables.propagate(e);
+      throw Throwables.propagate(e);
     }
-    throw new IllegalStateException("Service instance couldn't be created");
   }
 }

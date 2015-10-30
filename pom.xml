@@ -18,7 +18,7 @@
   <properties>
     <jdkLevel>1.7</jdkLevel>
 
-    <curator.version>2.6.0</curator.version>
+    <curator.version>2.9.0</curator.version>
     <maven-core.version>3.1.1</maven-core.version>
     <jackson.version>1.9.13</jackson.version>
     <jettyVersion>9.2.7.v20150116</jettyVersion>

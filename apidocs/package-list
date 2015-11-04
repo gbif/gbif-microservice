@@ -1,0 +1,5 @@
+org.gbif.jetty
+org.gbif.ws.app
+org.gbif.ws.discovery.conf
+org.gbif.ws.discovery.lifecycle
+org.gbif.ws.discovery.utils

@@ -4,7 +4,7 @@
   <parent>
     <groupId>org.gbif</groupId>
     <artifactId>motherpom</artifactId>
-    <version>25.1</version>
+    <version>26</version>
   </parent>
 
   <artifactId>gbif-microservice</artifactId>
@@ -22,7 +22,7 @@
     <maven-core.version>3.1.1</maven-core.version>
     <jackson.version>1.9.13</jackson.version>
     <jettyVersion>9.2.7.v20150116</jettyVersion>
-    <jcommander.version>1.7</jcommander.version>
+    <jcommander.version>1.48</jcommander.version>
     <slf4j.version>1.7.5</slf4j.version>
     <plexus-utils.version>3.0.15</plexus-utils.version>
     <guava.version>16.0.1</guava.version>

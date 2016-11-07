@@ -36,6 +36,7 @@ public class ContextFactory {
       root.setDescriptor(resourceBase + DESCRIPTOR_PATH);
       root.setResourceBase(resourceBase);
       root.setParentLoaderPriority(true);
+      root.setAttribute("org.eclipse.jetty.server.webapp.WebInfIncludeJarPattern", "^$");
       //set the connector
       root.setVirtualHosts(new String[] {String.format(VH_HOST_FMT,HttpConnectorFactory.APP_CONNECTOR_NAME)});
       return root;
@@ -52,6 +53,7 @@ public class ContextFactory {
     ContextHandler adminContext = new ContextHandler();
     adminContext.setContextPath(ROOT_CONTEXT);
     adminContext.setHandler(new StopHandler(server, secret));
+    adminContext.setAttribute("org.eclipse.jetty.server.webapp.WebInfIncludeJarPattern", "^$");
     //set the connector
     adminContext.setVirtualHosts(new String[] {String.format(VH_HOST_FMT,HttpConnectorFactory.ADMIN_CONNECTOR_NAME)});
     return adminContext;

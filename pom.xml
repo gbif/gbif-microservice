@@ -16,7 +16,7 @@
   <url>http://github.com/gbif/gbif-microservice</url>
 
   <properties>
-    <jdkLevel>1.7</jdkLevel>
+    <jdkLevel>1.8</jdkLevel>
 
     <curator.version>2.9.1</curator.version>
     <maven-core.version>3.3.9</maven-core.version>

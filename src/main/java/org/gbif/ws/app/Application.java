@@ -1,7 +1,7 @@
 package org.gbif.ws.app;
 
 import org.gbif.jetty.ServerFactory;
-import org.gbif.ws.discovery.conf.ServiceConfiguration;
+import org.gbif.discovery.conf.ServiceConfiguration;
 
 import com.beust.jcommander.JCommander;
 import com.beust.jcommander.ParameterException;

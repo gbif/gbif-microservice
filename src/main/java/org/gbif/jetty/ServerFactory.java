@@ -1,6 +1,6 @@
 package org.gbif.jetty;
 
-import org.gbif.ws.discovery.conf.ServiceConfiguration;
+import org.gbif.discovery.conf.ServiceConfiguration;
 import org.gbif.ws.discovery.lifecycle.DiscoveryLifeCycle;
 
 import org.eclipse.jetty.server.Connector;

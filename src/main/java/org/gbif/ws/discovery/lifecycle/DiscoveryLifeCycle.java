@@ -1,9 +1,9 @@
 package org.gbif.ws.discovery.lifecycle;
 
-import org.gbif.ws.discovery.conf.ServiceConfiguration;
-import org.gbif.ws.discovery.conf.ServiceDetails;
-import org.gbif.ws.discovery.conf.ServiceStatus;
-import org.gbif.ws.discovery.utils.MavenUtils;
+import org.gbif.discovery.conf.ServiceConfiguration;
+import org.gbif.discovery.conf.ServiceDetails;
+import org.gbif.discovery.conf.ServiceStatus;
+import org.gbif.discovery.utils.MavenUtils;
 
 import java.io.IOException;
 

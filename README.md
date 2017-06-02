@@ -1,14 +1,14 @@
-#gbif-microservice
+# gbif-microservice
 
 
 This project contains the basic functionality to wrap an existing web application into runnable jar file that embedded
 a Jetty server that expose.
 
-##Building the project
+## Building the project
 
 Execute "mvn clean package -U". A Maven profile is not needed.
 
-##Executing an application
+## Executing an application
 An application that uses this project can be executed using the following named parameters:
   * -conf
        Path to the configuration file
@@ -39,7 +39,7 @@ An application that uses this project can be executed using the following named 
 
 * required parameters.
 
-##Using this project
+## Using this project
 To enable this project in a web application follow the procedure described below:
  
 1. Modifications to the project pom.xml file:

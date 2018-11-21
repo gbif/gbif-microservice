@@ -63,8 +63,13 @@ public class ServerFactory {
   private static Connector[] buildConnectors(ServiceConfiguration configuration, Server server) {
     final HttpConnectorFactory appConnectorFactory = HttpConnectorFactory.application(server);
     appConnectorFactory.setPort(configuration.getHttpPort());
+    if (configuration.getMaxRequestHeaderSize() != null) {
+      appConnectorFactory.setMaxRequestHeaderSize(configuration.getMaxRequestHeaderSize());
+    }
+
     final HttpConnectorFactory adminConnectorFactory = HttpConnectorFactory.admin(server);
     adminConnectorFactory.setPort(configuration.getHttpAdminPort());
+
     return new Connector[] {appConnectorFactory.build(), adminConnectorFactory.build()};
   }
 

@@ -1,6 +1,8 @@
 package org.gbif.jetty;
 
 import org.eclipse.jetty.server.Connector;
+import org.eclipse.jetty.server.HttpConfiguration;
+import org.eclipse.jetty.server.HttpConnectionFactory;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.ServerConnector;
 
@@ -96,11 +98,15 @@ public class HttpConnectorFactory {
    * Builds an instance of a Connector using the values provider by the HttpConnectorFactory instance.
    */
   public Connector build() {
-    final ServerConnector httpConnector = new ServerConnector(server);
+    final HttpConfiguration httpConfiguration = new HttpConfiguration();
+    httpConfiguration.setRequestHeaderSize(maxRequestHeaderSize);
+
+    final HttpConnectionFactory httpConnectionFactory = new HttpConnectionFactory(httpConfiguration);
+
+    final ServerConnector httpConnector = new ServerConnector(server, httpConnectionFactory);
     httpConnector.setPort(port);
     httpConnector.setIdleTimeout(idleTimeout);
     httpConnector.setName(name);
     return httpConnector;
   }
-
 }

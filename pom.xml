@@ -19,7 +19,7 @@
     <jdkLevel>1.8</jdkLevel>
 
     <curator.version>2.9.1</curator.version>
-    <service-discovery.version>0.1</service-discovery.version>
+    <service-discovery.version>0.2</service-discovery.version>
     <maven-core.version>3.3.9</maven-core.version>
     <jackson.version>1.9.13</jackson.version>
     <jettyVersion>9.3.8.v20160314</jettyVersion>

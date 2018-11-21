@@ -22,7 +22,7 @@
     <service-discovery.version>0.2</service-discovery.version>
     <maven-core.version>3.3.9</maven-core.version>
     <jackson.version>1.9.13</jackson.version>
-    <jettyVersion>9.2.26.v20180806</jettyVersion>
+    <jettyVersion>9.3.25.v20180904</jettyVersion>
     <jcommander.version>1.48</jcommander.version>
     <slf4j.version>1.7.21</slf4j.version>
     <plexus-utils.version>3.0.22</plexus-utils.version>
